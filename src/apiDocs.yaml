@@ -1,0 +1,45 @@
+openapi: 3.0.1
+info:
+  title: BNPL Documentation
+  description: >-
+    This is swagger for BNPL service
+  contact:
+    email: thehien@telio.vn
+  version: 1.0.0
+servers:
+  - url: https://api.dev.telio.me/bnpl
+    description: development
+  - url: https://api.stg.telio.me/bnpl
+    description: stg
+  - url: http://localhost:1234/bnpl
+    description: localhost
+paths:
+  /health-check:
+    get:
+      tags:
+        - healthcheck
+      summary: Health Check
+      description: /health-check
+      operationId: healthcheck  
+      responses:
+        "200":
+          description: health check success
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /ping:
+    get:
+      tags:
+        - healthcheck
+      summary: Health Check
+      description: /ping
+      operationId: ping  
+      responses:
+        "200":
+          description: ping success
+          content:
+            application/json:
+              schema:
+                type: string  

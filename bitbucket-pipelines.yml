@@ -1,0 +1,22 @@
+definitions:
+  services:
+    docker:
+      memory: 2048
+  steps:
+    - step: &Build
+        name: build
+        services:
+            - docker
+        image:
+          name: python:3.7.4-alpine3.10
+        caches:
+          - docker
+          - pip
+        script:
+          - apk add bash
+          - ./cicd/build.sh
+        
+pipelines:
+  branches:
+    "{dev,stg,master}":
+      - step: *Build

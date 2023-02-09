@@ -1,0 +1,13 @@
+{
+  "app": {
+    "name": "telio-template-service",
+    "version": "1.0.5"
+  },
+  "build": {
+    "sha": "959fbd1",
+    "date": "Mon Feb 6 17:08:08 2023 +0700",
+    "author": "Nguyen Van Hanh",
+    "committer": "Nguyen Van Hanh",
+    "commit": "feat: login and register"
+  }
+}
