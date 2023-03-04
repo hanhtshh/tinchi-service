@@ -1,9 +1,7 @@
 import { Class } from "../../models";
 class ClassRepository {
   public async findOrCreateClass(condition: any) {
-    const result = await Class.findOrCreate({
-      where: condition,
-    });
+    const result = await Class.create(condition);
     return result;
   }
 
@@ -12,6 +10,18 @@ class ClassRepository {
       where: condition,
     });
     return result;
+  }
+
+  public async getAllClass(pageSize: number, current: number) {
+    const [classes, totalRows] = await Promise.all([
+      Class.findAll({
+        limit: pageSize,
+        offset: pageSize * (current - 1),
+      }),
+      Class.count({}),
+    ]);
+
+    return [classes, totalRows];
   }
 }
 

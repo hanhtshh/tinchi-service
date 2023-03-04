@@ -28,6 +28,12 @@ class UserController extends AbstractController {
       this.asyncRouteFormatResponse(this.getAllStudent)
     );
 
+    this.router.get(
+      `${this.path}/users/get-all-teacher`,
+      authorizeMiddleware.allSource,
+      this.asyncRouteFormatResponse(this.getAllTeacher)
+    );
+
     this.router.post(
       `${this.path}/users/create`,
       // authorizeMiddleware.adminSource,
@@ -114,6 +120,18 @@ class UserController extends AbstractController {
     const { pageSize = 10, current = 1 } = vArgs;
 
     const response = await this.userService.getAllStudent(pageSize, current);
+    return response;
+  };
+
+  getAllTeacher = async (request: IRequest) => {
+    const args = { ...request.query };
+    const vArgs = await this.validation(
+      args,
+      userValidation.getAllStudentValidation
+    );
+    const { pageSize = 10, current = 1 } = vArgs;
+
+    const response = await this.userService.getAllTeacher(pageSize, current);
     return response;
   };
 }

@@ -19,6 +19,7 @@ export class Class
   id!: number;
   status!: string;
   max_student!: number;
+  name!: string;
   tinchi_number!: number;
   total_student!: number;
   static initModel(sequelize: Sequelize): typeof Class {
@@ -29,9 +30,15 @@ export class Class
           autoIncrement: true,
           primaryKey: true,
         },
+        name: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          defaultValue: "",
+        },
         status: {
           type: DataTypes.STRING,
           allowNull: false,
+          defaultValue: "OPEN",
         },
         max_student: {
           type: DataTypes.INTEGER,
@@ -58,7 +65,7 @@ export class Class
             fields: ["status"],
           },
         ],
-        modelName: MODEL_NAME.USER_CLASS,
+        modelName: MODEL_NAME.CLASS,
         schema: SCHEMA,
         timestamps: false,
       }

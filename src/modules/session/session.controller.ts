@@ -17,14 +17,18 @@ class SessionController extends AbstractController {
 
   protected initializeRoutes(): void {
     this.router.get(
-      `${this.path}/Session/get-Session-info`,
+      `${this.path}/session/get-session-info`,
       authorizeMiddleware.allSource,
       this.asyncRouteFormatResponse(this.getSessionInfo)
     );
 
+    this.router.get(
+      `${this.path}/session/get-all-session`,
+      this.asyncRouteFormatResponse(this.getAllsession)
+    );
+
     this.router.post(
-      `${this.path}/Sessions/create`,
-      authorizeMiddleware.adminSource,
+      `${this.path}/sessions/create`,
       this.asyncRouteFormatResponse(this.createSession)
     );
   }
@@ -38,6 +42,18 @@ class SessionController extends AbstractController {
     const query = vArgs;
 
     const response = await this.sessionService.getSessionInfo(query);
+    return response;
+  };
+
+  getAllsession = async (request: IRequest) => {
+    const args = { ...request.query };
+    const vArgs = await this.validation(
+      args,
+      SessionValidation.getAllSessionValidation
+    );
+    const { pageSize = 10, current = 1 } = vArgs;
+
+    const response = await this.sessionService.getAllSession(pageSize, current);
     return response;
   };
 

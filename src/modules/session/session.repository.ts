@@ -13,6 +13,17 @@ class SessionRepository {
     });
     return result;
   }
+
+  public async getAllSession(pageSize: number, current: number) {
+    const [sessions, totalRows] = await Promise.all([
+      Session.findAll({
+        limit: pageSize,
+        offset: pageSize * (current - 1),
+      }),
+      Session.count(),
+    ]);
+    return [sessions, totalRows];
+  }
 }
 
 export const sessionRepository = new SessionRepository();

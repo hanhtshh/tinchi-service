@@ -20,6 +20,22 @@ export class ClassService implements ClassServiceInterface {
     }
   }
 
+  public async getAllClass(pageSize: number, current: number): Promise<any> {
+    try {
+      this.logger.info("ok");
+      const [classes, totalRows] = await classRepository.getAllClass(
+        pageSize,
+        current
+      );
+      return {
+        classes,
+        totalRows,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   //Create class account
   public async createNewClass(classInfo: ClassCreateAttributes): Promise<any> {
     try {

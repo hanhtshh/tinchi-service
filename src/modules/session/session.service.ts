@@ -20,6 +20,20 @@ export class SessionService implements SessionServiceInterface {
     }
   }
 
+  //Get all session
+  public async getAllSession(pageSize: number, current: number): Promise<any> {
+    try {
+      this.logger.info("ok");
+      const [sessions, totalRows] = await sessionRepository.getAllSession(
+        pageSize,
+        current
+      );
+      return { sessions, totalRows };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   //Create Session account
   public async createNewSession(
     SessionInfo: SessionCreateAttributes

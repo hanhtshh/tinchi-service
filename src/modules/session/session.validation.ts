@@ -10,16 +10,23 @@ const getSessionInforValidation = async (args: any) =>
       .regex(/(84|0[3|5|7|8|9])+([0-9]{8})\b/),
   }).validateAsync(args, { stripUnknown: true });
 
+const getAllSessionValidation = async (args: any) =>
+  Joi.object({
+    pageSize: Joi.number().optional().min(0),
+    current: Joi.number().optional().min(0),
+  }).validateAsync(args, { stripUnknown: true });
+
 const createSessionValidation = async (args: any) =>
   Joi.object({
-    name: Joi.string().required(),
-    max_student: Joi.number().required().min(0),
-    tinchi_number: Joi.number().required().min(0),
+    date: Joi.date().required(),
+    start_time: Joi.number().required().min(0),
+    total_time: Joi.number().required().min(0),
   }).validateAsync(args, { stripUnknown: true });
 
 const sessionValidation = {
   getSessionInforValidation,
   createSessionValidation,
+  getAllSessionValidation,
 };
 
 export default sessionValidation;

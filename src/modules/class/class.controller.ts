@@ -17,14 +17,19 @@ class ClassController extends AbstractController {
 
   protected initializeRoutes(): void {
     this.router.get(
-      `${this.path}/Class/get-Class-info`,
+      `${this.path}/class/get-class-info`,
       authorizeMiddleware.allSource,
       this.asyncRouteFormatResponse(this.getClassInfo)
     );
 
+    this.router.get(
+      `${this.path}/class/get-all-class`,
+      authorizeMiddleware.allSource,
+      this.asyncRouteFormatResponse(this.getAllClass)
+    );
+
     this.router.post(
-      `${this.path}/Classs/create`,
-      authorizeMiddleware.adminSource,
+      `${this.path}/class/create`,
       this.asyncRouteFormatResponse(this.createClass)
     );
   }
@@ -41,17 +46,28 @@ class ClassController extends AbstractController {
     return response;
   };
 
+  getAllClass = async (request: IRequest) => {
+    const args = { ...request.query };
+    const vArgs = await this.validation(
+      args,
+      classValidation.getAllClassValidation
+    );
+    const { pageSize = 10, current = 1 } = vArgs;
+
+    const response = await this.classService.getAllClass(pageSize, current);
+    return response;
+  };
+
   createClass = async (request: IRequest) => {
     const args = { ...request.body };
     const vArgs = await this.validation(
       args,
       classValidation.createClassValidation
     );
-    const { name, status, max_student, tinchi_number } = vArgs;
+    const { name, max_student, tinchi_number } = vArgs;
 
     const response = await this.classService.createNewClass({
       name,
-      status,
       max_student,
       tinchi_number,
     });

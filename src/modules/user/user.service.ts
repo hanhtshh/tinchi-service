@@ -146,6 +146,28 @@ export class UserService implements UserServiceInterface {
       throw error;
     }
   }
+
+  //Get all students
+  public async getAllTeacher(pageSize: number, current: number): Promise<any> {
+    try {
+      const listStudent = await userRepository.getAllUserByRole(
+        {
+          role: 1,
+        },
+        pageSize,
+        current
+      );
+      return listStudent.map((user: any) => ({
+        ...user.dataValues,
+        password: CryptoJs.AES.decrypt(
+          user.dataValues.password,
+          config.auth_secret
+        ).toString(CryptoJs.enc.Utf8),
+      }));
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export const userService = new UserService();
