@@ -4,6 +4,8 @@ import { HttpError } from "../../common/http";
 import config from "../../config";
 import { Logger } from "../../logger";
 import { UserCreateAttributes } from "../../models/user.model";
+import { classRepository } from "../class/class.repository";
+import { userClassRepository } from "../userClass/userClass.repository";
 
 import { UserServiceInterface } from "./user.interface";
 import { userRepository } from "./user.repository";
@@ -164,6 +166,43 @@ export class UserService implements UserServiceInterface {
           config.auth_secret
         ).toString(CryptoJs.enc.Utf8),
       }));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  //Get all students
+  public async getStudentDetail(id: number): Promise<any> {
+    try {
+      const studentDetail: any = await userRepository.getUserDetail({
+        id,
+      });
+      if (studentDetail) {
+        const listUserClass = await userClassRepository.getAllUserClassByUserId(
+          {
+            user_id: id,
+          }
+        );
+        const listClass = await Promise.all(
+          listUserClass.map((userClass: any) => {
+            return classRepository.getClassById(userClass.id);
+          })
+        );
+        return {
+          ...studentDetail.dataValues,
+          password: CryptoJs.AES.decrypt(
+            studentDetail.dataValues.password,
+            config.auth_secret
+          ).toString(CryptoJs.enc.Utf8),
+          listClass,
+        };
+      } else {
+        throw new HttpError(
+          404,
+          "Không tìm thấy thông tin",
+          "Không tìm thấy thông tin"
+        );
+      }
     } catch (error) {
       throw error;
     }

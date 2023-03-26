@@ -6,6 +6,7 @@ const MODEL_NAME = {
   USER_CLASS: "user_classes",
   SESSION: "sessions",
   CLASS_SESSION: "class_sessions",
+  SUBJECT: "subjects",
 };
 
 const SCHEMA = config.mysql.schema;

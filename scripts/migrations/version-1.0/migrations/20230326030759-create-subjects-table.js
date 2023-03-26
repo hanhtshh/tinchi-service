@@ -4,7 +4,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     try {
       await queryInterface.createTable(
-        'classes',
+        'subjects',
         {
           id: {
             autoIncrement: true,
@@ -12,25 +12,11 @@ module.exports = {
             allowNull: false,
             primaryKey: true,
           },
-          subject_id: {
-            type: Sequelize.DataTypes.BIGINT,
-            allowNull: false,
-          },
-          group: {
-            type: Sequelize.DataTypes.INTEGER,
-            allowNull: false,
-          },
-          status: {
-            type: Sequelize.DataTypes.ENUM(['OPEN', 'CLOSE']),
-            allowNull: false,
-            defaultValue: 'OPEN'
-          },
-          max_student: {
-            type: Sequelize.DataTypes.INTEGER,
+          name: {
+            type: Sequelize.DataTypes.STRING,
             allowNull: true,
-            defaultValue: 0
           },
-          total_student: {
+          tinchi_number: {
             type: Sequelize.DataTypes.INTEGER,
             allowNull: true,
             defaultValue: 0
@@ -47,7 +33,7 @@ module.exports = {
         { schema: process.env.MYSQL_SCHEMA }
       );
     } catch (error) {
-      console.error(`CREATE CLASSES TABLE ERROR: ${JSON.stringify(error)}`);
+      console.error(`CREATE SUBJECTS TABLE ERROR: ${JSON.stringify(error)}`);
       return false;
     }
   },
@@ -55,12 +41,12 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     try {
       await queryInterface.dropTable({
-        tableName: 'classes',
+        tableName: 'subjects',
         schema: process.env.MYSQL_SCHEMA,
       });
     }
     catch (error) {
-      console.error(`DROP CLASSES TABLE ERROR: ${JSON.stringify(error)}`);
+      console.error(`DROP SUBJECTS TABLE ERROR: ${JSON.stringify(error)}`);
       return false;
     }
   },

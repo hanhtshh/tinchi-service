@@ -41,7 +41,7 @@ export class UserClass
         updatedAt: "updated_at",
         modelName: MODEL_NAME.USER_CLASS,
         schema: SCHEMA,
-        timestamps: false,
+        timestamps: true,
       }
     );
 

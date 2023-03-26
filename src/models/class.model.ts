@@ -3,10 +3,10 @@ import { MODEL_NAME, SCHEMA } from "../common/constants/models.constant";
 
 export interface ClassAttributes {
   id?: number;
-  name?: string;
+  subject_id?: number;
+  group?: number;
   status?: string;
   max_student?: number;
-  tinchi_number?: number;
   total_student?: number;
 }
 
@@ -17,10 +17,11 @@ export class Class
   implements ClassAttributes
 {
   id!: number;
+  subject_id!: number;
+  group!: number;
   status!: string;
   max_student!: number;
   name!: string;
-  tinchi_number!: number;
   total_student!: number;
   static initModel(sequelize: Sequelize): typeof Class {
     Class.init(
@@ -30,10 +31,16 @@ export class Class
           autoIncrement: true,
           primaryKey: true,
         },
-        name: {
-          type: DataTypes.STRING,
+
+        subject_id: {
+          type: DataTypes.BIGINT,
           allowNull: false,
-          defaultValue: "",
+          defaultValue: 0,
+        },
+        group: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          defaultValue: 0,
         },
         status: {
           type: DataTypes.STRING,
@@ -41,11 +48,6 @@ export class Class
           defaultValue: "OPEN",
         },
         max_student: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-          defaultValue: 0,
-        },
-        tinchi_number: {
           type: DataTypes.INTEGER,
           allowNull: false,
           defaultValue: 0,
@@ -67,7 +69,7 @@ export class Class
         ],
         modelName: MODEL_NAME.CLASS,
         schema: SCHEMA,
-        timestamps: false,
+        timestamps: true,
       }
     );
 

@@ -25,6 +25,13 @@ class UserRepository {
     });
     return result;
   }
+
+  public async getUserDetail(condition: any) {
+    const result = await User.findOne({
+      where: condition,
+    });
+    return result;
+  }
 }
 
 export const userRepository = new UserRepository();

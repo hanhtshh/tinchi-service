@@ -1,4 +1,5 @@
 import { Class } from "../../models";
+import { subjectRepository } from "../subject/subject.repository";
 class ClassRepository {
   public async findOrCreateClass(condition: any) {
     const result = await Class.create(condition);
@@ -21,7 +22,28 @@ class ClassRepository {
       Class.count({}),
     ]);
 
-    return [classes, totalRows];
+    const classesFormat = await Promise.all(
+      classes.map(async (classDetail: any) => {
+        const subject = await subjectRepository.getSubjectById(
+          classDetail.dataValues.subject_id
+        );
+        return {
+          ...classDetail.dataValues,
+          subject,
+        };
+      })
+    );
+
+    return [classesFormat, totalRows];
+  }
+
+  public async getClassById(id: number) {
+    const userClass = await Class.findOne({
+      where: {
+        id: id,
+      },
+    });
+    return userClass;
   }
 }
 

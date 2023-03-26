@@ -24,7 +24,7 @@ class ClassController extends AbstractController {
 
     this.router.get(
       `${this.path}/class/get-all-class`,
-      authorizeMiddleware.allSource,
+      // authorizeMiddleware.allSource,
       this.asyncRouteFormatResponse(this.getAllClass)
     );
 
@@ -64,12 +64,12 @@ class ClassController extends AbstractController {
       args,
       classValidation.createClassValidation
     );
-    const { name, max_student, tinchi_number } = vArgs;
+    const { subject_id, group, max_student } = vArgs;
 
     const response = await this.classService.createNewClass({
-      name,
+      subject_id,
+      group,
       max_student,
-      tinchi_number,
     });
     return response;
   };

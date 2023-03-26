@@ -50,12 +50,18 @@ const getAllStudentValidation = async (args: any) =>
     current: Joi.required().optional(),
   }).validateAsync(args, { stripUnknown: true });
 
+const getStudentDetailValidation = async (args: any) =>
+  Joi.object({
+    id: Joi.number().required(),
+  }).validateAsync(args, { stripUnknown: true });
+
 const userValidation = {
   getUserInforValidation,
   createUserValidation,
   loginUserValidation,
   registerUserValidation,
-  getAllStudentValidation
+  getAllStudentValidation,
+  getStudentDetailValidation,
 };
 
 export default userValidation;

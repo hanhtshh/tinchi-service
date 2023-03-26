@@ -4,9 +4,9 @@ const getClassInforValidation = async (args: any) =>
 
 const createClassValidation = async (args: any) =>
   Joi.object({
-    name: Joi.string().required(),
+    subject_id: Joi.number().required().min(0),
     max_student: Joi.number().required().min(0),
-    tinchi_number: Joi.number().required().min(0),
+    group: Joi.number().required().min(0),
   }).validateAsync(args, { stripUnknown: true });
 
 const getAllClassValidation = async (args: any) =>

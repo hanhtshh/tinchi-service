@@ -52,7 +52,7 @@ export class Session
         ],
         modelName: MODEL_NAME.SESSION,
         schema: SCHEMA,
-        timestamps: false,
+        timestamps: true,
       }
     );
 
