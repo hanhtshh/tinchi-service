@@ -19,12 +19,17 @@ export class SubjectService {
     }
   }
 
-  public async getAllSubject(pageSize: number, current: number): Promise<any> {
+  public async getAllSubject(
+    pageSize: number,
+    current: number,
+    name: string
+  ): Promise<any> {
     try {
       this.logger.info("ok");
       const [subjects, totalRows] = await subjectRepository.getAllSubject(
         pageSize,
-        current
+        current,
+        name
       );
       return {
         subjects,

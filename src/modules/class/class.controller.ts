@@ -52,9 +52,13 @@ class ClassController extends AbstractController {
       args,
       classValidation.getAllClassValidation
     );
-    const { pageSize = 10, current = 1 } = vArgs;
+    const { pageSize = 10, current = 1, name = "" } = vArgs;
 
-    const response = await this.classService.getAllClass(pageSize, current);
+    const response = await this.classService.getAllClass(
+      pageSize,
+      current,
+      name
+    );
     return response;
   };
 
@@ -64,12 +68,13 @@ class ClassController extends AbstractController {
       args,
       classValidation.createClassValidation
     );
-    const { subject_id, group, max_student } = vArgs;
+    const { subject_id, group, max_student, listSessionId } = vArgs;
 
     const response = await this.classService.createNewClass({
       subject_id,
       group,
       max_student,
+      listSessionId,
     });
     return response;
   };

@@ -18,12 +18,17 @@ class UserRepository {
     condition: any,
     pageSize: number,
     current: number
-  ) {
-    const result = await User.findAll({
-      where: condition,
-      offset: pageSize * (current - 1),
-    });
-    return result;
+  ): Promise<[User[], number]> {
+    const [result, totalRows] = await Promise.all([
+      User.findAll({
+        where: condition,
+        offset: pageSize * (current - 1),
+      }),
+      User.count({
+        where: condition,
+      }),
+    ]);
+    return [result, totalRows];
   }
 
   public async getUserDetail(condition: any) {

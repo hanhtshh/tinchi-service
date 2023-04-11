@@ -122,9 +122,13 @@ class UserController extends AbstractController {
       args,
       userValidation.getAllStudentValidation
     );
-    const { pageSize = 10, current = 1 } = vArgs;
+    const { pageSize = 10, current = 1, name = "" } = vArgs;
 
-    const response = await this.userService.getAllStudent(pageSize, current);
+    const response = await this.userService.getAllStudent(
+      pageSize,
+      current,
+      name
+    );
     return response;
   };
 
@@ -134,9 +138,13 @@ class UserController extends AbstractController {
       args,
       userValidation.getAllStudentValidation
     );
-    const { pageSize = 10, current = 1 } = vArgs;
+    const { pageSize = 10, current = 1, name = "" } = vArgs;
 
-    const response = await this.userService.getAllTeacher(pageSize, current);
+    const response = await this.userService.getAllTeacher(
+      pageSize,
+      current,
+      name
+    );
     return response;
   };
 

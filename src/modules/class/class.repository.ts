@@ -1,5 +1,6 @@
 import { Class } from "../../models";
 import { subjectRepository } from "../subject/subject.repository";
+
 class ClassRepository {
   public async findOrCreateClass(condition: any) {
     const result = await Class.create(condition);
@@ -13,13 +14,12 @@ class ClassRepository {
     return result;
   }
 
-  public async getAllClass(pageSize: number, current: number) {
-    const [classes, totalRows] = await Promise.all([
+  public async getAllClass(pageSize: number, current: number, name: string) {
+    const [classes] = await Promise.all([
       Class.findAll({
         limit: pageSize,
         offset: pageSize * (current - 1),
       }),
-      Class.count({}),
     ]);
 
     const classesFormat = await Promise.all(
@@ -27,14 +27,20 @@ class ClassRepository {
         const subject = await subjectRepository.getSubjectById(
           classDetail.dataValues.subject_id
         );
-        return {
-          ...classDetail.dataValues,
-          subject,
-        };
+        if (subject?.name.toUpperCase().includes(name.toUpperCase())) {
+          return {
+            ...classDetail.dataValues,
+            subject,
+          };
+        }
+        return null;
       })
     );
 
-    return [classesFormat, totalRows];
+    return [
+      classesFormat.filter((class_check) => class_check != null),
+      classesFormat.length,
+    ];
   }
 
   public async getClassById(id: number) {

@@ -48,6 +48,7 @@ const getAllStudentValidation = async (args: any) =>
   Joi.object({
     pageSize: Joi.number().optional(),
     current: Joi.required().optional(),
+    name: Joi.string().optional().allow(""),
   }).validateAsync(args, { stripUnknown: true });
 
 const getStudentDetailValidation = async (args: any) =>

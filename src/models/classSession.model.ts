@@ -19,7 +19,7 @@ export class ClassSession
   implements ClassSessionAttributes
 {
   id!: number;
-  user_id!: number;
+  session_id!: number;
   class_id!: number;
   static initModel(sequelize: Sequelize): typeof ClassSession {
     ClassSession.init(

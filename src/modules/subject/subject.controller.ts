@@ -57,9 +57,13 @@ class SubjectController extends AbstractController {
       args,
       subjectValidation.getAllSubjectValidation
     );
-    const { pageSize = 10, current = 1 } = vArgs;
+    const { pageSize = 10, current = 1, name = "" } = vArgs;
 
-    const response = await this.subjectService.getAllSubject(pageSize, current);
+    const response = await this.subjectService.getAllSubject(
+      pageSize,
+      current,
+      name
+    );
     return response;
   };
 

@@ -1,5 +1,7 @@
 import { Subject } from "../../models";
 import { SubjectCreateAttributes } from "../../models/subject.model";
+import { Op } from "sequelize";
+
 class SubjectRepository {
   public async findOrCreateSubject(condition: any) {
     const result = await Subject.create(condition);
@@ -13,13 +15,24 @@ class SubjectRepository {
     return result;
   }
 
-  public async getAllSubject(pageSize: number, current: number) {
+  public async getAllSubject(pageSize: number, current: number, name: string) {
     const [subjects, totalRows] = await Promise.all([
       Subject.findAll({
+        where: {
+          name: {
+            [Op.like]: "%" + name + "%",
+          },
+        },
         limit: pageSize,
         offset: pageSize * (current - 1),
       }),
-      Subject.count({}),
+      Subject.count({
+        where: {
+          name: {
+            [Op.like]: "%" + name + "%",
+          },
+        },
+      }),
     ]);
 
     return [subjects, totalRows];

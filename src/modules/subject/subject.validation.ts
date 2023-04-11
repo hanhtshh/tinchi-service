@@ -19,6 +19,7 @@ const getAllSubjectValidation = async (args: any) =>
   Joi.object({
     pageSize: Joi.number().optional(),
     current: Joi.number().optional(),
+    name: Joi.string().optional().allow(""),
   }).validateAsync(args, { stripUnknown: true });
 
 const subjectValidation = {

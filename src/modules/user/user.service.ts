@@ -9,6 +9,7 @@ import { userClassRepository } from "../userClass/userClass.repository";
 
 import { UserServiceInterface } from "./user.interface";
 import { userRepository } from "./user.repository";
+import { Op } from "sequelize";
 
 export class UserService implements UserServiceInterface {
   private logger: Logger;
@@ -128,44 +129,66 @@ export class UserService implements UserServiceInterface {
   }
 
   //Get all students
-  public async getAllStudent(pageSize: number, current: number): Promise<any> {
+  public async getAllStudent(
+    pageSize: number,
+    current: number,
+    name: string
+  ): Promise<any> {
     try {
-      const listStudent = await userRepository.getAllUserByRole(
+      const [listStudent, totalRows] = await userRepository.getAllUserByRole(
         {
           role: 0,
+          name: {
+            [Op.like]: "%" + name + "%",
+          },
         },
         pageSize,
         current
       );
-      return listStudent.map((user: any) => ({
-        ...user.dataValues,
-        password: CryptoJs.AES.decrypt(
-          user.dataValues.password,
-          config.auth_secret
-        ).toString(CryptoJs.enc.Utf8),
-      }));
+      return {
+        listStudent: {
+          students: listStudent.map((user: any) => ({
+            ...user.dataValues,
+            password: CryptoJs.AES.decrypt(
+              user.dataValues.password,
+              config.auth_secret
+            ).toString(CryptoJs.enc.Utf8),
+          })),
+          totalRows,
+        },
+      };
     } catch (error) {
       throw error;
     }
   }
 
   //Get all students
-  public async getAllTeacher(pageSize: number, current: number): Promise<any> {
+  public async getAllTeacher(
+    pageSize: number,
+    current: number,
+    name: string
+  ): Promise<any> {
     try {
-      const listStudent = await userRepository.getAllUserByRole(
+      const [listTeacher, totalRows] = await userRepository.getAllUserByRole(
         {
           role: 1,
+          name: {
+            [Op.like]: "%" + name + "%",
+          },
         },
         pageSize,
         current
       );
-      return listStudent.map((user: any) => ({
-        ...user.dataValues,
-        password: CryptoJs.AES.decrypt(
-          user.dataValues.password,
-          config.auth_secret
-        ).toString(CryptoJs.enc.Utf8),
-      }));
+      return {
+        teachers: listTeacher.map((user: any) => ({
+          ...user.dataValues,
+          password: CryptoJs.AES.decrypt(
+            user.dataValues.password,
+            config.auth_secret
+          ).toString(CryptoJs.enc.Utf8),
+        })),
+        totalRows,
+      };
     } catch (error) {
       throw error;
     }
