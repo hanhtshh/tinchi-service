@@ -1,6 +1,7 @@
 import { UserClass } from "../../models";
+import { UserClassAttributes } from "../../models/userClass.model";
 class UserClassRepository {
-  public async createUserClass(condition: any) {
+  public async createUserClass(condition: UserClassAttributes) {
     const result = await UserClass.findOrCreate({
       where: condition,
     });
@@ -30,6 +31,13 @@ class UserClassRepository {
 
   public async getUserDetail(condition: any) {
     const result = await UserClass.findOne({
+      where: condition,
+    });
+    return result;
+  }
+
+  public async deleteAllClass(condition: any) {
+    const result = await UserClass.destroy({
       where: condition,
     });
     return result;

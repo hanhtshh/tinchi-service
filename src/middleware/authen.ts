@@ -19,6 +19,7 @@ const allSource = (request: IRequest, res: Response, next: NextFunction) => {
     const token = authHeader[1];
     const userInfo: any = jwt.verify(token, config.token_secret);
     if (userInfo?.role >= 0 && tokenPrefix === "Bearer") {
+      (request as any).userInfo = userInfo;
       return next();
     }
   }
@@ -32,7 +33,9 @@ const adminSource = (request: IRequest, res: Response, next: NextFunction) => {
     const tokenPrefix = authHeader[0];
     const token = authHeader[1];
     const userInfo: any = jwt.verify(token, config.token_secret);
+
     if (userInfo?.role === 2 && tokenPrefix === "Bearer") {
+      (request as any).userInfo = userInfo;
       return next();
     }
   }

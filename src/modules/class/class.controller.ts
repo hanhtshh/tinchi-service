@@ -32,6 +32,17 @@ class ClassController extends AbstractController {
       `${this.path}/class/create`,
       this.asyncRouteFormatResponse(this.createClass)
     );
+
+    this.router.post(
+      `${this.path}/class/check-schedule`,
+      this.asyncRouteFormatResponse(this.checkSchedule)
+    );
+
+    this.router.post(
+      `${this.path}/class/add-class`,
+       authorizeMiddleware.allSource,
+      this.asyncRouteFormatResponse(this.addClass)
+    );
   }
 
   getClassInfo = async (request: IRequest) => {
@@ -76,6 +87,31 @@ class ClassController extends AbstractController {
       max_student,
       listSessionId,
     });
+    return response;
+  };
+
+  checkSchedule = async (request: IRequest) => {
+    const args = { ...request.body };
+    const vArgs = await this.validation(
+      args,
+      classValidation.checkScheduleValidation
+    );
+    const { listClassId } = vArgs;
+
+    const response = await this.classService.checkSchedule(listClassId);
+    return response;
+  };
+
+  addClass = async (request: IRequest) => {
+    const args = { ...request.body };
+    const vArgs = await this.validation(
+      args,
+      classValidation.checkScheduleValidation
+    );
+    const userInfo = (request as any)?.userInfo;
+    const { listClassId } = vArgs;
+
+    const response = await this.classService.addClass(listClassId, userInfo);
     return response;
   };
 }

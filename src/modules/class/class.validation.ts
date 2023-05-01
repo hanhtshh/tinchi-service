@@ -17,10 +17,16 @@ const getAllClassValidation = async (args: any) =>
     name: Joi.string().optional().allow(""),
   }).validateAsync(args, { stripUnknown: true });
 
+const checkScheduleValidation = async (args: any) =>
+  Joi.object({
+    listClassId: Joi.array().items(Joi.number()),
+  }).validateAsync(args, { stripUnknown: true });
+
 const classValidation = {
   getClassInforValidation,
   createClassValidation,
   getAllClassValidation,
+  checkScheduleValidation,
 };
 
 export default classValidation;
