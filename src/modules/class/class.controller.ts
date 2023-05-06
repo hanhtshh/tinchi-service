@@ -18,7 +18,7 @@ class ClassController extends AbstractController {
   protected initializeRoutes(): void {
     this.router.get(
       `${this.path}/class/get-class-info`,
-      authorizeMiddleware.allSource,
+      // authorizeMiddleware.allSource,
       this.asyncRouteFormatResponse(this.getClassInfo)
     );
 

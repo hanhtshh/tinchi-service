@@ -10,6 +10,9 @@ import { userClassRepository } from "../userClass/userClass.repository";
 import { UserServiceInterface } from "./user.interface";
 import { userRepository } from "./user.repository";
 import { Op } from "sequelize";
+import { subjectRepository } from "../subject/subject.repository";
+import { ClassSession } from "../../models";
+import { sessionRepository } from "../session/session.repository";
 
 export class UserService implements UserServiceInterface {
   private logger: Logger;
@@ -206,9 +209,38 @@ export class UserService implements UserServiceInterface {
             user_id: id,
           }
         );
+        console.log(listUserClass);
         const listClass = await Promise.all(
-          listUserClass.map((userClass: any) => {
-            return classRepository.getClassById(userClass.id);
+          listUserClass.map(async (userClass: any) => {
+            const classDetail = await classRepository.getClassById(
+              userClass.class_id
+            );
+            let subjectDetail;
+            let sessionList;
+            if (classDetail) {
+              subjectDetail = await subjectRepository.getSubjectById(
+                classDetail?.subject_id
+              );
+              const classSessionList = await ClassSession.findAll({
+                where: {
+                  class_id: classDetail?.id,
+                },
+                raw: true,
+              });
+              sessionList = await Promise.all(
+                classSessionList?.map((classSession) =>
+                  sessionRepository.getSessionByQuery({
+                    id: classSession.session_id,
+                  })
+                )
+              );
+            }
+
+            return {
+              ...classDetail,
+              subject: subjectDetail,
+              sessionList,
+            };
           })
         );
         return {

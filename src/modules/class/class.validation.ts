@@ -1,6 +1,8 @@
 import Joi from "joi";
 const getClassInforValidation = async (args: any) =>
-  Joi.object({}).validateAsync(args, { stripUnknown: true });
+  Joi.object({
+    id: Joi.number().optional(),
+  }).validateAsync(args, { stripUnknown: true });
 
 const createClassValidation = async (args: any) =>
   Joi.object({

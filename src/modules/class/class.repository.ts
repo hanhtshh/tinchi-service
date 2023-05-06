@@ -10,6 +10,7 @@ class ClassRepository {
   public async getClassByQuery(condition: any) {
     const result = await Class.findOne({
       where: condition,
+      raw: true,
     });
     return result;
   }
@@ -48,6 +49,7 @@ class ClassRepository {
       where: {
         id: id,
       },
+      raw: true,
     });
     return userClass;
   }

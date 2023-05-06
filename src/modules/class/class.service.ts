@@ -1,6 +1,7 @@
 import { HttpError } from "../../common/http";
 import { Logger } from "../../logger";
 import { ClassSession } from "../../models";
+import { userRepository } from "../user/user.repository";
 import { userClassRepository } from "../userClass/userClass.repository";
 import { ClassServiceInterface } from "./class.interface";
 import { classRepository } from "./class.repository";
@@ -16,7 +17,21 @@ export class ClassService implements ClassServiceInterface {
   public async getClassInfo(query: any): Promise<any> {
     try {
       this.logger.info("ok");
-      return classRepository.getClassByQuery(query);
+      const classDetail = await classRepository.getClassByQuery(query);
+      const listUserClass = await userClassRepository.getAllUserClassByUserId({
+        class_id: classDetail?.id,
+      });
+      const listUserInfo = await Promise.all(
+        listUserClass?.map((userClass: any) =>
+          userRepository.getUserByQuery({
+            id: userClass.user_id,
+          })
+        )
+      );
+      return {
+        ...classDetail,
+        listUserInfo,
+      };
     } catch (error) {
       throw error;
     }
