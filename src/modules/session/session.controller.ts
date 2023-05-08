@@ -51,9 +51,13 @@ class SessionController extends AbstractController {
       args,
       SessionValidation.getAllSessionValidation
     );
-    const { pageSize = 10, current = 1 } = vArgs;
+    const { pageSize = 10, current = 1, date } = vArgs;
 
-    const response = await this.sessionService.getAllSession(pageSize, current);
+    const response = await this.sessionService.getAllSession(
+      pageSize,
+      current,
+      date
+    );
     return response;
   };
 

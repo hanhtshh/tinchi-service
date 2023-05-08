@@ -14,6 +14,18 @@ class UserRepository {
     return result;
   }
 
+  public async updateUserInfo(userInfo: any, condition: any) {
+    const result = await User.update(
+      {
+        ...userInfo,
+      },
+      {
+        where: condition,
+      }
+    );
+    return result;
+  }
+
   public async getAllUserByRole(
     condition: any,
     pageSize: number,

@@ -14,6 +14,7 @@ const getAllSessionValidation = async (args: any) =>
   Joi.object({
     pageSize: Joi.number().optional().min(0),
     current: Joi.number().optional().min(0),
+    date: Joi.string().optional(),
   }).validateAsync(args, { stripUnknown: true });
 
 const createSessionValidation = async (args: any) =>

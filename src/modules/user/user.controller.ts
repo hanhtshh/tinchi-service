@@ -45,6 +45,12 @@ class UserController extends AbstractController {
       this.asyncRouteFormatResponse(this.createUser)
     );
 
+    this.router.put(
+      `${this.path}/users/update`,
+      // authorizeMiddleware.adminSource,
+      this.asyncRouteFormatResponse(this.updateUser)
+    );
+
     this.router.post(
       `${this.path}/user/login`,
       this.asyncRouteFormatResponse(this.loginUser)
@@ -74,14 +80,36 @@ class UserController extends AbstractController {
       args,
       userValidation.createUserValidation
     );
-    const { name, email, phone_number, role, password } = vArgs;
+    const { name, email, phone_number, role, password, listClassId } = vArgs;
+    console.log(listClassId);
+    const response = await this.userService.createUserAccount(
+      {
+        name,
+        email,
+        password,
+        phone_number,
+        role,
+      },
+      listClassId
+    );
+    return response;
+  };
 
-    const response = await this.userService.createUserAccount({
+  updateUser = async (request: IRequest) => {
+    const args = { ...request.body };
+    const vArgs = await this.validation(
+      args,
+      userValidation.createUserValidation
+    );
+    const { name, email, phone_number, role, password, id } = vArgs;
+    console.log("dsf");
+    const response = await this.userService.updateUserAccount({
       name,
       email,
       password,
       phone_number,
       role,
+      id,
     });
     return response;
   };

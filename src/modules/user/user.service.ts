@@ -13,6 +13,7 @@ import { Op } from "sequelize";
 import { subjectRepository } from "../subject/subject.repository";
 import { ClassSession } from "../../models";
 import { sessionRepository } from "../session/session.repository";
+import { classService } from "../class/class.service";
 
 export class UserService implements UserServiceInterface {
   private logger: Logger;
@@ -32,7 +33,10 @@ export class UserService implements UserServiceInterface {
   }
 
   //Create User account
-  public async createUserAccount(userInfo: UserCreateAttributes): Promise<any> {
+  public async createUserAccount(
+    userInfo: any,
+    listClassId: any
+  ): Promise<any> {
     try {
       const secret = config.auth_secret;
       const encryptedPassword = CryptoJs.AES.encrypt(
@@ -43,6 +47,30 @@ export class UserService implements UserServiceInterface {
         ...userInfo,
         password: encryptedPassword,
       });
+      await classService.addClass(listClassId, newUser[0].id);
+      return newUser;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  //update user acount
+  public async updateUserAccount(userInfo: UserCreateAttributes): Promise<any> {
+    try {
+      const secret = config.auth_secret;
+      const encryptedPassword = CryptoJs.AES.encrypt(
+        userInfo.password,
+        secret
+      ).toString();
+      const newUser = await userRepository.updateUserInfo(
+        {
+          ...userInfo,
+          password: encryptedPassword,
+        },
+        {
+          id: userInfo.id,
+        }
+      );
       return newUser;
     } catch (error) {
       throw error;

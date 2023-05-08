@@ -40,9 +40,21 @@ class ClassController extends AbstractController {
 
     this.router.post(
       `${this.path}/class/add-class`,
-       authorizeMiddleware.allSource,
+      authorizeMiddleware.allSource,
       this.asyncRouteFormatResponse(this.addClass)
     );
+
+    this.router.post(
+      `${this.path}/class/add-class-admin`,
+      authorizeMiddleware.allSource,
+      this.asyncRouteFormatResponse(this.addClassAdmin)
+    );
+
+    this.router.put(
+      `${this.path}/class/update`,
+      this.asyncRouteFormatResponse(this.createClass)
+    );
+    
   }
 
   getClassInfo = async (request: IRequest) => {
@@ -90,6 +102,24 @@ class ClassController extends AbstractController {
     return response;
   };
 
+  updateClass = async (request: IRequest) => {
+    const args = { ...request.body };
+    const vArgs = await this.validation(
+      args,
+      classValidation.createClassValidation
+    );
+    const { subject_id, group, max_student, listSessionId, id } = vArgs;
+
+    const response = await this.classService.updateClass({
+      subject_id,
+      group,
+      max_student,
+      listSessionId,
+      id,
+    });
+    return response;
+  };
+
   checkSchedule = async (request: IRequest) => {
     const args = { ...request.body };
     const vArgs = await this.validation(
@@ -111,7 +141,22 @@ class ClassController extends AbstractController {
     const userInfo = (request as any)?.userInfo;
     const { listClassId } = vArgs;
 
-    const response = await this.classService.addClass(listClassId, userInfo);
+    const response = await this.classService.addClass(
+      listClassId,
+      userInfo?.id
+    );
+    return response;
+  };
+
+  addClassAdmin = async (request: IRequest) => {
+    const args = { ...request.body };
+    const vArgs = await this.validation(
+      args,
+      classValidation.checkScheduleValidation
+    );
+    const { listClassId, userId } = vArgs;
+
+    const response = await this.classService.addClass(listClassId, userId);
     return response;
   };
 }

@@ -21,6 +21,8 @@ const createUserValidation = async (args: any) =>
       .required()
       .regex(/(84|0[3|5|7|8|9])+([0-9]{8})\b/),
     role: Joi.number().valid(0, 1, 2),
+    id: Joi.number().optional(),
+    listClassId: Joi.array().items(Joi.number()).optional(),
   }).validateAsync(args, { stripUnknown: true });
 
 const loginUserValidation = async (args: any) =>

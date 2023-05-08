@@ -10,6 +10,7 @@ const createClassValidation = async (args: any) =>
     max_student: Joi.number().required().min(0),
     group: Joi.number().required().min(0),
     listSessionId: Joi.array().items(Joi.number()),
+    id: Joi.number().optional(),
   }).validateAsync(args, { stripUnknown: true });
 
 const getAllClassValidation = async (args: any) =>
@@ -22,6 +23,7 @@ const getAllClassValidation = async (args: any) =>
 const checkScheduleValidation = async (args: any) =>
   Joi.object({
     listClassId: Joi.array().items(Joi.number()),
+    userId: Joi.number().optional(),
   }).validateAsync(args, { stripUnknown: true });
 
 const classValidation = {

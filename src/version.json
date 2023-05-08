@@ -4,10 +4,10 @@
     "version": "1.0.5"
   },
   "build": {
-    "sha": "30389a5",
-    "date": "Sat May 6 23:16:17 2023 +0700",
+    "sha": "c4843a2",
+    "date": "Sun May 7 13:03:46 2023 +0700",
     "author": "Nguyen Van Hanh",
     "committer": "Nguyen Van Hanh",
-    "commit": "feat: 6/5"
+    "commit": "fix"
   }
 }

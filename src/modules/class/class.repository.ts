@@ -7,6 +7,20 @@ class ClassRepository {
     return result;
   }
 
+  public async updateClass(condition: any, id: any) {
+    const result = await Class.update(
+      {
+        ...condition,
+      },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    return result;
+  }
+
   public async getClassByQuery(condition: any) {
     const result = await Class.findOne({
       where: condition,

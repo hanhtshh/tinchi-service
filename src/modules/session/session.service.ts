@@ -21,12 +21,17 @@ export class SessionService implements SessionServiceInterface {
   }
 
   //Get all session
-  public async getAllSession(pageSize: number, current: number): Promise<any> {
+  public async getAllSession(
+    pageSize: number,
+    current: number,
+    date: string
+  ): Promise<any> {
     try {
       this.logger.info("ok");
       const [sessions, totalRows] = await sessionRepository.getAllSession(
         pageSize,
-        current
+        current,
+        date
       );
       return { sessions, totalRows };
     } catch (error) {
