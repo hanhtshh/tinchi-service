@@ -95,10 +95,17 @@ class ClassService {
                 if (sessionSet.size !== classInfo.listSessionId.length) {
                     throw new http_1.HttpError(400, "Kíp học bị trùng, vui lòng kiểm tra lại", "Kíp học bị trùng, vui lòng kiểm tra lại");
                 }
-                yield models_1.ClassSession.bulkCreate(classInfo.listSessionId.map((sessionId) => ({
-                    session_id: sessionId,
-                    class_id: classResult[1][0].id,
-                })));
+                if (classResult[0]) {
+                    yield models_1.ClassSession.destroy({
+                        where: {
+                            class_id: classInfo.id,
+                        },
+                    });
+                    yield models_1.ClassSession.bulkCreate(classInfo.listSessionId.map((sessionId) => ({
+                        session_id: sessionId,
+                        class_id: classInfo.id,
+                    })));
+                }
                 return classResult;
             }
             catch (error) {

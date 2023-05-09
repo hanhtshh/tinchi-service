@@ -113,12 +113,19 @@ export class ClassService implements ClassServiceInterface {
           "Kíp học bị trùng, vui lòng kiểm tra lại"
         );
       }
-      await ClassSession.bulkCreate(
-        classInfo.listSessionId.map((sessionId: any) => ({
-          session_id: sessionId,
-          class_id: classResult[1][0].id,
-        }))
-      );
+      if (classResult[0]) {
+        await ClassSession.destroy({
+          where: {
+            class_id: classInfo.id,
+          },
+        });
+        await ClassSession.bulkCreate(
+          classInfo.listSessionId.map((sessionId: any) => ({
+            session_id: sessionId,
+            class_id: classInfo.id,
+          }))
+        );
+      }
       return classResult;
     } catch (error) {
       throw error;
