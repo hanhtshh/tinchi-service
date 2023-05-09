@@ -52,9 +52,8 @@ class ClassController extends AbstractController {
 
     this.router.put(
       `${this.path}/class/update`,
-      this.asyncRouteFormatResponse(this.createClass)
+      this.asyncRouteFormatResponse(this.updateClass)
     );
-    
   }
 
   getClassInfo = async (request: IRequest) => {

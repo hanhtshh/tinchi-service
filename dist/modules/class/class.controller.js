@@ -94,7 +94,7 @@ class ClassController extends rest_controller_1.AbstractController {
         this.router.post(`${this.path}/class/check-schedule`, this.asyncRouteFormatResponse(this.checkSchedule));
         this.router.post(`${this.path}/class/add-class`, authen_1.default.allSource, this.asyncRouteFormatResponse(this.addClass));
         this.router.post(`${this.path}/class/add-class-admin`, authen_1.default.allSource, this.asyncRouteFormatResponse(this.addClassAdmin));
-        this.router.put(`${this.path}/class/update`, this.asyncRouteFormatResponse(this.createClass));
+        this.router.put(`${this.path}/class/update`, this.asyncRouteFormatResponse(this.updateClass));
     }
 }
 exports.default = ClassController;
