@@ -2,8 +2,8 @@
   "name": "telio-template-service",
   "version": "1.0.5",
   "description": "Buy now pay later",
-  "engines": {
-    "node": "14.17.0"
+    "engines": {
+    "node": "16.20.0"
   },
   "main": "./src/server.ts",
   "scripts": {
@@ -18,7 +18,7 @@
     "migration:down": "sequelize db:migrate:undo --name",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
-    "build": "tsc --project tsconfig.json && cp src/apiDocs.yaml dist/",
+    "build": "rimraf ./build && tsc",
     "prestart": "npm run migration:up",
     "start": "node dist/server.js",
     "start:dev": "npm run migration:up & make start-dev",
