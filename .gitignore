@@ -22,7 +22,6 @@ environments/
 
 # Maven
 target/
-dist/
 
 # JetBrains IDE
 .idea/
