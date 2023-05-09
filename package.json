@@ -18,7 +18,7 @@
     "migration:down": "sequelize db:migrate:undo --name",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
-    "build": "rimraf ./build && tsc",
+    "build": "npm i && rimraf ./build && tsc",
     "prestart": "npm run migration:up",
     "start": "node dist/server.js",
     "start:dev": "npm run migration:up & make start-dev",
