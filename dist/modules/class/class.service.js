@@ -111,6 +111,11 @@ class ClassService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log(listClassId);
+                const listClass = yield Promise.all(listClassId.map((class_id) => class_repository_1.classRepository.getClassById(class_id)));
+                const listSubjectId = listClass.map((classDetail) => classDetail === null || classDetail === void 0 ? void 0 : classDetail.subject_id);
+                if (new Set(listSubjectId).size !== listSubjectId.length) {
+                    return false;
+                }
                 const listSessionArray = yield Promise.all(listClassId.map((class_id) => models_1.ClassSession.findAll({
                     where: {
                         class_id: class_id,
