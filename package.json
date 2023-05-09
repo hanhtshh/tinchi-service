@@ -17,7 +17,7 @@
     "prebuild": "npm run clean",
     "build": "tsc --project tsconfig.json && cp src/apiDocs.yaml dist/",
     "prestart": "npm run migration:up",
-    "start": "node dist/server.js",
+    "start": "nodemon src/server.ts",
     "start:dev": "npm run migration:up & make start-dev",
     "debug": "make debug-ts",
     "prepare": "husky install",
