@@ -129,6 +129,15 @@ export class ClassService implements ClassServiceInterface {
   public async checkSchedule(listClassId: number[]): Promise<any> {
     try {
       console.log(listClassId);
+      const listClass = await Promise.all(
+        listClassId.map((class_id) => classRepository.getClassById(class_id))
+      );
+      const listSubjectId = listClass.map(
+        (classDetail) => classDetail?.subject_id
+      );
+      if (new Set(listSubjectId).size !== listSubjectId.length) {
+        return false;
+      }
       const listSessionArray = await Promise.all(
         listClassId.map((class_id) =>
           ClassSession.findAll({
