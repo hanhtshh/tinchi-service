@@ -13,7 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const joi_1 = __importDefault(require("joi"));
-const getSubjectInforValidation = (args) => __awaiter(void 0, void 0, void 0, function* () { return joi_1.default.object({}).validateAsync(args, { stripUnknown: true }); });
+const getSubjectInforValidation = (args) => __awaiter(void 0, void 0, void 0, function* () {
+    return joi_1.default.object({
+        id: joi_1.default.number().optional(),
+    }).validateAsync(args, { stripUnknown: true });
+});
 const createSubjectValidation = (args) => __awaiter(void 0, void 0, void 0, function* () {
     return joi_1.default.object({
         name: joi_1.default.string().required(),
