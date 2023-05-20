@@ -1,7 +1,6 @@
 import { UserClass } from "../../models";
-import { UserClassAttributes } from "../../models/userClass.model";
 class UserClassRepository {
-  public async createUserClass(condition: UserClassAttributes) {
+  public async createUserClass(condition: any) {
     const result = await UserClass.findOrCreate({
       where: condition,
     });
