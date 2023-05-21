@@ -30,11 +30,12 @@ class ClassRepository {
   }
 
   public async getAllClass(pageSize: number, current: number, name: string) {
-    const [classes] = await Promise.all([
+    const [classes, total] = await Promise.all([
       Class.findAll({
         limit: pageSize,
         offset: pageSize * (current - 1),
       }),
+      Class.count({}),
     ]);
 
     const classesFormat = await Promise.all(
@@ -52,10 +53,7 @@ class ClassRepository {
       })
     );
 
-    return [
-      classesFormat.filter((class_check) => class_check != null),
-      classesFormat.length,
-    ];
+    return [classesFormat.filter((class_check) => class_check != null), total];
   }
 
   public async getClassById(id: number) {

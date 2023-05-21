@@ -135,10 +135,21 @@ export class ClassService implements ClassServiceInterface {
   //Check duplicate schedule
   public async checkSchedule(listClassId: number[]): Promise<any> {
     try {
-      console.log(listClassId);
+      let result = true;
       const listClass = await Promise.all(
         listClassId.map((class_id) => classRepository.getClassById(class_id))
       );
+      listClass.forEach((class_info) => {
+        if (
+          (class_info?.total_student || 0) + 1 >
+          (class_info?.max_student || 0)
+        ) {
+          result = false;
+        }
+      });
+      if (!result) {
+        return result;
+      }
       const listSubjectId = listClass.map(
         (classDetail) => classDetail?.subject_id
       );
@@ -162,7 +173,7 @@ export class ClassService implements ClassServiceInterface {
       });
       const listSessionIdSet = new Set(listSessionId);
       if (listSessionIdSet.size == listSessionId.length) {
-        return true;
+        return listClass;
       }
       return false;
     } catch (error) {
@@ -178,14 +189,22 @@ export class ClassService implements ClassServiceInterface {
         await userClassRepository.deleteAllClass({
           user_id: user_id,
         });
-        await Promise.all(
-          listClassId.map((class_id) =>
+        await Promise.all([
+          ...listClassId.map((class_id) =>
             userClassRepository.createUserClass({
               user_id: user_id,
               class_id: class_id,
             })
-          )
-        );
+          ),
+          ...checkScheduleResult.map((classDetail: any) =>
+            classRepository.updateClass(
+              {
+                total_student: checkScheduleResult?.total_student + 1,
+              },
+              classDetail?.id
+            )
+          ),
+        ]);
         return true;
       }
       return false;
