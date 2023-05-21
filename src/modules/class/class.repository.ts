@@ -35,7 +35,7 @@ class ClassRepository {
         limit: pageSize,
         offset: pageSize * (current - 1),
       }),
-      Class.count({}),
+      Class.count(),
     ]);
 
     const classesFormat = await Promise.all(
