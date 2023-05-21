@@ -1,5 +1,5 @@
 import { Logger } from "../../logger";
-import { SessionCreateAttributes } from "../../models/session.model";
+import { Session, SessionCreateAttributes } from "../../models/session.model";
 import { SessionServiceInterface } from "./session.interface";
 import { sessionRepository } from "./session.repository";
 
@@ -45,6 +45,20 @@ export class SessionService implements SessionServiceInterface {
   ): Promise<any> {
     try {
       return sessionRepository.findOrCreateSession(SessionInfo);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  //update Session account
+  public async updateSession(
+    SessionInfo: SessionCreateAttributes,
+    id: number
+  ): Promise<any> {
+    try {
+      return Session.update(SessionInfo, {
+        where: { id },
+      });
     } catch (error) {
       throw error;
     }

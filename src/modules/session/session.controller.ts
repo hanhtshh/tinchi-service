@@ -31,6 +31,11 @@ class SessionController extends AbstractController {
       `${this.path}/sessions/create`,
       this.asyncRouteFormatResponse(this.createSession)
     );
+
+    this.router.put(
+      `${this.path}/sessions/update/:id`,
+      this.asyncRouteFormatResponse(this.updateSession)
+    );
   }
 
   getSessionInfo = async (request: IRequest) => {
@@ -74,6 +79,25 @@ class SessionController extends AbstractController {
       start_time,
       total_time,
     });
+    return response;
+  };
+
+  updateSession = async (request: IRequest) => {
+    const args = { ...request.body, ...request.params };
+    const vArgs = await this.validation(
+      args,
+      SessionValidation.createSessionValidation
+    );
+    const { date, start_time, total_time, id } = vArgs;
+
+    const response = await this.sessionService.updateSession(
+      {
+        date,
+        start_time,
+        total_time,
+      },
+      id
+    );
     return response;
   };
 }
