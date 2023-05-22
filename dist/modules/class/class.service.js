@@ -117,8 +117,17 @@ class ClassService {
     checkSchedule(listClassId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log(listClassId);
+                let result = true;
                 const listClass = yield Promise.all(listClassId.map((class_id) => class_repository_1.classRepository.getClassById(class_id)));
+                listClass.forEach((class_info) => {
+                    if (((class_info === null || class_info === void 0 ? void 0 : class_info.total_student) || 0) + 1 >
+                        ((class_info === null || class_info === void 0 ? void 0 : class_info.max_student) || 0)) {
+                        result = false;
+                    }
+                });
+                if (!result) {
+                    return result;
+                }
                 const listSubjectId = listClass.map((classDetail) => classDetail === null || classDetail === void 0 ? void 0 : classDetail.subject_id);
                 if (new Set(listSubjectId).size !== listSubjectId.length) {
                     return false;
@@ -134,7 +143,7 @@ class ClassService {
                 });
                 const listSessionIdSet = new Set(listSessionId);
                 if (listSessionIdSet.size == listSessionId.length) {
-                    return true;
+                    return listClass;
                 }
                 return false;
             }
@@ -152,10 +161,15 @@ class ClassService {
                     yield userClass_repository_1.userClassRepository.deleteAllClass({
                         user_id: user_id,
                     });
-                    yield Promise.all(listClassId.map((class_id) => userClass_repository_1.userClassRepository.createUserClass({
-                        user_id: user_id,
-                        class_id: class_id,
-                    })));
+                    yield Promise.all([
+                        ...listClassId.map((class_id) => userClass_repository_1.userClassRepository.createUserClass({
+                            user_id: user_id,
+                            class_id: class_id,
+                        })),
+                        ...checkScheduleResult.map((classDetail) => class_repository_1.classRepository.updateClass({
+                            total_student: (checkScheduleResult === null || checkScheduleResult === void 0 ? void 0 : checkScheduleResult.total_student) + 1,
+                        }, classDetail === null || classDetail === void 0 ? void 0 : classDetail.id)),
+                    ]);
                     return true;
                 }
                 return false;

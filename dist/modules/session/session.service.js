@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sessionService = exports.SessionService = void 0;
 const logger_1 = require("../../logger");
+const session_model_1 = require("../../models/session.model");
 const session_repository_1 = require("./session.repository");
 class SessionService {
     constructor() {
@@ -46,6 +47,19 @@ class SessionService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 return session_repository_1.sessionRepository.findOrCreateSession(SessionInfo);
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    //update Session account
+    updateSession(SessionInfo, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return session_model_1.Session.update(SessionInfo, {
+                    where: { id },
+                });
             }
             catch (error) {
                 throw error;

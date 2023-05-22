@@ -40,11 +40,12 @@ class ClassRepository {
     }
     getAllClass(pageSize, current, name) {
         return __awaiter(this, void 0, void 0, function* () {
-            const [classes] = yield Promise.all([
+            const [classes, total] = yield Promise.all([
                 models_1.Class.findAll({
                     limit: pageSize,
                     offset: pageSize * (current - 1),
                 }),
+                models_1.Class.count(),
             ]);
             const classesFormat = yield Promise.all(classes.map((classDetail) => __awaiter(this, void 0, void 0, function* () {
                 const subject = yield subject_repository_1.subjectRepository.getSubjectById(classDetail.dataValues.subject_id);
@@ -53,10 +54,7 @@ class ClassRepository {
                 }
                 return null;
             })));
-            return [
-                classesFormat.filter((class_check) => class_check != null),
-                classesFormat.length,
-            ];
+            return [classesFormat.filter((class_check) => class_check != null), total];
         });
     }
     getClassById(id) {

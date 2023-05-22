@@ -44,6 +44,17 @@ class SessionController extends rest_controller_1.AbstractController {
             });
             return response;
         });
+        this.updateSession = (request) => __awaiter(this, void 0, void 0, function* () {
+            const args = Object.assign(Object.assign({}, request.body), request.params);
+            const vArgs = yield this.validation(args, session_validation_1.default.createSessionValidation);
+            const { date, start_time, total_time, id } = vArgs;
+            const response = yield this.sessionService.updateSession({
+                date,
+                start_time,
+                total_time,
+            }, id);
+            return response;
+        });
         this.sessionService = sessionService;
         this.initializeRoutes();
     }
@@ -51,6 +62,7 @@ class SessionController extends rest_controller_1.AbstractController {
         this.router.get(`${this.path}/session/get-session-info`, authen_1.default.allSource, this.asyncRouteFormatResponse(this.getSessionInfo));
         this.router.get(`${this.path}/session/get-all-session`, this.asyncRouteFormatResponse(this.getAllsession));
         this.router.post(`${this.path}/sessions/create`, this.asyncRouteFormatResponse(this.createSession));
+        this.router.put(`${this.path}/sessions/update/:id`, this.asyncRouteFormatResponse(this.updateSession));
     }
 }
 exports.default = SessionController;
