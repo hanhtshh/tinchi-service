@@ -199,7 +199,7 @@ export class ClassService implements ClassServiceInterface {
           ...checkScheduleResult.map((classDetail: any) =>
             classRepository.updateClass(
               {
-                total_student: checkScheduleResult?.total_student + 1,
+                total_student: (checkScheduleResult?.total_student || 0) + 1,
               },
               classDetail?.id
             )

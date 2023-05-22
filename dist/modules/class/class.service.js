@@ -167,7 +167,7 @@ class ClassService {
                             class_id: class_id,
                         })),
                         ...checkScheduleResult.map((classDetail) => class_repository_1.classRepository.updateClass({
-                            total_student: (checkScheduleResult === null || checkScheduleResult === void 0 ? void 0 : checkScheduleResult.total_student) + 1,
+                            total_student: ((checkScheduleResult === null || checkScheduleResult === void 0 ? void 0 : checkScheduleResult.total_student) || 0) + 1,
                         }, classDetail === null || classDetail === void 0 ? void 0 : classDetail.id)),
                     ]);
                     return true;
