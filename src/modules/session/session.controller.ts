@@ -72,12 +72,13 @@ class SessionController extends AbstractController {
       args,
       SessionValidation.createSessionValidation
     );
-    const { date, start_time, total_time } = vArgs;
+    const { date, start_time, total_time, place } = vArgs;
 
     const response = await this.sessionService.createNewSession({
       date,
       start_time,
       total_time,
+      place,
     });
     return response;
   };
@@ -88,13 +89,14 @@ class SessionController extends AbstractController {
       args,
       SessionValidation.createSessionValidation
     );
-    const { date, start_time, total_time, id } = vArgs;
+    const { date, start_time, total_time, place, id } = vArgs;
 
     const response = await this.sessionService.updateSession(
       {
         date,
         start_time,
         total_time,
+        place,
       },
       id
     );

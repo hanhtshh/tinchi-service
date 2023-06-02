@@ -36,22 +36,24 @@ class SessionController extends rest_controller_1.AbstractController {
         this.createSession = (request) => __awaiter(this, void 0, void 0, function* () {
             const args = Object.assign({}, request.body);
             const vArgs = yield this.validation(args, session_validation_1.default.createSessionValidation);
-            const { date, start_time, total_time } = vArgs;
+            const { date, start_time, total_time, place } = vArgs;
             const response = yield this.sessionService.createNewSession({
                 date,
                 start_time,
                 total_time,
+                place,
             });
             return response;
         });
         this.updateSession = (request) => __awaiter(this, void 0, void 0, function* () {
             const args = Object.assign(Object.assign({}, request.body), request.params);
             const vArgs = yield this.validation(args, session_validation_1.default.createSessionValidation);
-            const { date, start_time, total_time, id } = vArgs;
+            const { date, start_time, total_time, place, id } = vArgs;
             const response = yield this.sessionService.updateSession({
                 date,
                 start_time,
                 total_time,
+                place,
             }, id);
             return response;
         });

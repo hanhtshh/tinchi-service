@@ -22,6 +22,7 @@ const createSessionValidation = async (args: any) =>
     date: Joi.date().required(),
     start_time: Joi.number().required().min(0),
     total_time: Joi.number().required().min(0),
+    place: Joi.string().required(),
     id: Joi.number().optional(),
   }).validateAsync(args, { stripUnknown: true });
 

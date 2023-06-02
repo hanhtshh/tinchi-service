@@ -35,6 +35,7 @@ const createSessionValidation = (args) => __awaiter(void 0, void 0, void 0, func
         date: joi_1.default.date().required(),
         start_time: joi_1.default.number().required().min(0),
         total_time: joi_1.default.number().required().min(0),
+        place: joi_1.default.string().required(),
         id: joi_1.default.number().optional(),
     }).validateAsync(args, { stripUnknown: true });
 });
