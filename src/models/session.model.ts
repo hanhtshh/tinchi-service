@@ -6,6 +6,7 @@ export interface SessionAttributes {
   date?: Date;
   start_time?: number;
   total_time?: number;
+  place?: string;
 }
 
 export type SessionCreateAttributes = Optional<SessionAttributes, "id">;
@@ -18,6 +19,7 @@ export class Session
   date!: Date;
   start_time!: number;
   total_time!: number;
+  place!: string;
   static initModel(sequelize: Sequelize): typeof Session {
     Session.init(
       {
@@ -39,6 +41,11 @@ export class Session
           type: DataTypes.INTEGER,
           allowNull: false,
           defaultValue: 0,
+        },
+        place: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          defaultValue: "405-A2",
         },
       },
       {

@@ -25,6 +25,11 @@ class Session extends sequelize_1.Model {
                 allowNull: false,
                 defaultValue: 0,
             },
+            place: {
+                type: sequelize_1.DataTypes.STRING,
+                allowNull: false,
+                defaultValue: "405-A2",
+            },
         }, {
             sequelize,
             createdAt: "created_at",
