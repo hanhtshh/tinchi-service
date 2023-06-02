@@ -21,6 +21,7 @@ const getSessionInforValidation = (args) => __awaiter(void 0, void 0, void 0, fu
         phone_number: joi_1.default.string()
             .optional()
             .regex(/(84|0[3|5|7|8|9])+([0-9]{8})\b/),
+        id: joi_1.default.number().optional(),
     }).validateAsync(args, { stripUnknown: true });
 });
 const getAllSessionValidation = (args) => __awaiter(void 0, void 0, void 0, function* () {
