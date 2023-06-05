@@ -54,6 +54,21 @@ class ClassController extends AbstractController {
       `${this.path}/class/update`,
       this.asyncRouteFormatResponse(this.updateClass)
     );
+
+    this.router.get(
+      `${this.path}/class/dashboard-data`,
+      this.asyncRouteFormatResponse(this.getDashboardData)
+    );
+
+    this.router.get(
+      `${this.path}/class/dashboard-data-2`,
+      this.asyncRouteFormatResponse(this.getDashboardData2)
+    );
+
+    this.router.get(
+      `${this.path}/class/dashboard-data-3`,
+      this.asyncRouteFormatResponse(this.getDashboardData3)
+    );
   }
 
   getClassInfo = async (request: IRequest) => {
@@ -116,6 +131,45 @@ class ClassController extends AbstractController {
       listSessionId,
       id,
     });
+    return response;
+  };
+
+  getDashboardData = async (request: IRequest) => {
+    const args = { ...request.query };
+    const vArgs = await this.validation(
+      args,
+      classValidation.getListUserClassIn7Days
+    );
+    const query = vArgs;
+    console.log(query);
+
+    const response = await this.classService.getClassPer7Days();
+    return response;
+  };
+
+  getDashboardData2 = async (request: IRequest) => {
+    const args = { ...request.query };
+    const vArgs = await this.validation(
+      args,
+      classValidation.getListUserClassIn7Days
+    );
+    const query = vArgs;
+    console.log(query);
+
+    const response = await this.classService.getTotalEmpty();
+    return response;
+  };
+
+  getDashboardData3 = async (request: IRequest) => {
+    const args = { ...request.query };
+    const vArgs = await this.validation(
+      args,
+      classValidation.getListUserClassIn7Days
+    );
+    const query = vArgs;
+    console.log(query);
+
+    const response = await this.classService.getClassesDashboard();
     return response;
   };
 

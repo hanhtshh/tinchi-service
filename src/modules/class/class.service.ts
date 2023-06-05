@@ -1,7 +1,8 @@
 import { HttpError } from "../../common/http";
 import { Logger } from "../../logger";
-import { ClassSession } from "../../models";
+import { Class, ClassSession } from "../../models";
 import { sessionRepository } from "../session/session.repository";
+import { subjectRepository } from "../subject/subject.repository";
 import { userRepository } from "../user/user.repository";
 import { userClassRepository } from "../userClass/userClass.repository";
 import { ClassServiceInterface } from "./class.interface";
@@ -132,6 +133,36 @@ export class ClassService implements ClassServiceInterface {
     }
   }
 
+  //update class account
+  public async getClassPer7Days(): Promise<any> {
+    try {
+      const listClassPerDays = await Promise.all([
+        classRepository.getClassPer1DayAgo(7),
+        classRepository.getClassPer1DayAgo(6),
+        classRepository.getClassPer1DayAgo(5),
+        classRepository.getClassPer1DayAgo(4),
+        classRepository.getClassPer1DayAgo(3),
+        classRepository.getClassPer1DayAgo(2),
+        classRepository.getClassPer1DayAgo(1),
+      ]);
+      const totalSlot = await classRepository.getTotalSlot();
+      // const list_empty_slot = await classResult.map((class_detail)=>class_detail.)
+      return listClassPerDays.map((classPerDay, index) => {
+        let emptySlot = totalSlot;
+        console.log(index);
+        for (let i = index; i < 6; i++) {
+          emptySlot = emptySlot + listClassPerDays[i + 1];
+        }
+        return {
+          emptySlot,
+          submitSlot: classPerDay,
+        };
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
   //Check duplicate schedule
   public async checkSchedule(listClassId: number[]): Promise<any> {
     try {
@@ -208,6 +239,48 @@ export class ClassService implements ClassServiceInterface {
         return true;
       }
       return false;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  //update class account
+  public async getTotalEmpty(): Promise<any> {
+    try {
+      const totalEmpty = await classRepository.getTotalSlot();
+      const submitSlot = await Class.sum("total_student");
+      return {
+        totalEmpty,
+        submitSlot,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  //update class account
+  public async getClassesDashboard(): Promise<any> {
+    try {
+      const classes = await Class.findAll({
+        order: [["total_student", "DESC"]],
+        limit: 10,
+      });
+      const classesFormat = await Promise.all(
+        classes.map(async (classDetail: any) => {
+          const subject = await subjectRepository.getSubjectById(
+            classDetail.dataValues.subject_id
+          );
+          if (subject?.name.toUpperCase().includes("")) {
+            return {
+              ...classDetail.dataValues,
+              subject,
+            };
+          }
+          return null;
+        })
+      );
+
+      return classesFormat.filter((class_check) => class_check != null);
     } catch (error) {
       throw error;
     }

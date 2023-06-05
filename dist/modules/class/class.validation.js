@@ -40,10 +40,12 @@ const checkScheduleValidation = (args) => __awaiter(void 0, void 0, void 0, func
         userId: joi_1.default.number().optional(),
     }).validateAsync(args, { stripUnknown: true });
 });
+const getListUserClassIn7Days = (args) => __awaiter(void 0, void 0, void 0, function* () { return joi_1.default.object({}).validateAsync(args, { stripUnknown: true }); });
 const classValidation = {
     getClassInforValidation,
     createClassValidation,
     getAllClassValidation,
     checkScheduleValidation,
+    getListUserClassIn7Days,
 };
 exports.default = classValidation;

@@ -26,11 +26,15 @@ const checkScheduleValidation = async (args: any) =>
     userId: Joi.number().optional(),
   }).validateAsync(args, { stripUnknown: true });
 
+const getListUserClassIn7Days = async (args: any) =>
+  Joi.object({}).validateAsync(args, { stripUnknown: true });
+
 const classValidation = {
   getClassInforValidation,
   createClassValidation,
   getAllClassValidation,
   checkScheduleValidation,
+  getListUserClassIn7Days,
 };
 
 export default classValidation;

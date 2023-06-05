@@ -58,6 +58,30 @@ class ClassController extends rest_controller_1.AbstractController {
             });
             return response;
         });
+        this.getDashboardData = (request) => __awaiter(this, void 0, void 0, function* () {
+            const args = Object.assign({}, request.query);
+            const vArgs = yield this.validation(args, class_validation_1.default.getListUserClassIn7Days);
+            const query = vArgs;
+            console.log(query);
+            const response = yield this.classService.getClassPer7Days();
+            return response;
+        });
+        this.getDashboardData2 = (request) => __awaiter(this, void 0, void 0, function* () {
+            const args = Object.assign({}, request.query);
+            const vArgs = yield this.validation(args, class_validation_1.default.getListUserClassIn7Days);
+            const query = vArgs;
+            console.log(query);
+            const response = yield this.classService.getTotalEmpty();
+            return response;
+        });
+        this.getDashboardData3 = (request) => __awaiter(this, void 0, void 0, function* () {
+            const args = Object.assign({}, request.query);
+            const vArgs = yield this.validation(args, class_validation_1.default.getListUserClassIn7Days);
+            const query = vArgs;
+            console.log(query);
+            const response = yield this.classService.getClassesDashboard();
+            return response;
+        });
         this.checkSchedule = (request) => __awaiter(this, void 0, void 0, function* () {
             const args = Object.assign({}, request.body);
             const vArgs = yield this.validation(args, class_validation_1.default.checkScheduleValidation);
@@ -95,6 +119,9 @@ class ClassController extends rest_controller_1.AbstractController {
         this.router.post(`${this.path}/class/add-class`, authen_1.default.allSource, this.asyncRouteFormatResponse(this.addClass));
         this.router.post(`${this.path}/class/add-class-admin`, authen_1.default.allSource, this.asyncRouteFormatResponse(this.addClassAdmin));
         this.router.put(`${this.path}/class/update`, this.asyncRouteFormatResponse(this.updateClass));
+        this.router.get(`${this.path}/class/dashboard-data`, this.asyncRouteFormatResponse(this.getDashboardData));
+        this.router.get(`${this.path}/class/dashboard-data-2`, this.asyncRouteFormatResponse(this.getDashboardData2));
+        this.router.get(`${this.path}/class/dashboard-data-3`, this.asyncRouteFormatResponse(this.getDashboardData3));
     }
 }
 exports.default = ClassController;

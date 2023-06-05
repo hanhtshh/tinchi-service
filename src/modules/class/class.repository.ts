@@ -1,4 +1,5 @@
-import { Class } from "../../models";
+import { Op } from "sequelize";
+import { Class, UserClass } from "../../models";
 import { subjectRepository } from "../subject/subject.repository";
 
 class ClassRepository {
@@ -64,6 +65,29 @@ class ClassRepository {
       raw: true,
     });
     return userClass;
+  }
+
+  public async getClassPer1DayAgo(day_number: number) {
+    const where: any = {
+      updated_at: {
+        [Op.between]: [
+          new Date(new Date().getTime() - day_number * 60 * 60 * 24 * 1000),
+          new Date(
+            new Date().getTime() - (day_number - 1) * 60 * 60 * 24 * 1000
+          ),
+        ],
+      },
+    };
+    const userClass = await UserClass.count({
+      where,
+    });
+    return userClass;
+  }
+
+  public async getTotalSlot() {
+    const totalSlot =
+      (await Class.sum("max_student")) - (await Class.sum("total_student"));
+    return totalSlot;
   }
 }
 

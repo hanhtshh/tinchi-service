@@ -8,6 +8,7 @@ export interface ClassAttributes {
   status?: string;
   max_student?: number;
   total_student?: number;
+  updated_at?: Date;
 }
 
 export type ClassCreateAttributes = Optional<ClassAttributes, "id">;
@@ -23,6 +24,7 @@ export class Class
   max_student!: number;
   name!: string;
   total_student!: number;
+  readonly updated_at?: Date;
   static initModel(sequelize: Sequelize): typeof Class {
     Class.init(
       {

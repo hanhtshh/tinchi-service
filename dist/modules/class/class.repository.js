@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.classRepository = void 0;
+const sequelize_1 = require("sequelize");
 const models_1 = require("../../models");
 const subject_repository_1 = require("../subject/subject.repository");
 class ClassRepository {
@@ -66,6 +67,28 @@ class ClassRepository {
                 raw: true,
             });
             return userClass;
+        });
+    }
+    getClassPer1DayAgo(day_number) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const where = {
+                updated_at: {
+                    [sequelize_1.Op.between]: [
+                        new Date(new Date().getTime() - day_number * 60 * 60 * 24 * 1000),
+                        new Date(new Date().getTime() - (day_number - 1) * 60 * 60 * 24 * 1000),
+                    ],
+                },
+            };
+            const userClass = yield models_1.UserClass.count({
+                where,
+            });
+            return userClass;
+        });
+    }
+    getTotalSlot() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const totalSlot = (yield models_1.Class.sum("max_student")) - (yield models_1.Class.sum("total_student"));
+            return totalSlot;
         });
     }
 }

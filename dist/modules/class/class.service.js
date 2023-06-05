@@ -14,6 +14,7 @@ const http_1 = require("../../common/http");
 const logger_1 = require("../../logger");
 const models_1 = require("../../models");
 const session_repository_1 = require("../session/session.repository");
+const subject_repository_1 = require("../subject/subject.repository");
 const user_repository_1 = require("../user/user.repository");
 const userClass_repository_1 = require("../userClass/userClass.repository");
 const class_repository_1 = require("./class.repository");
@@ -113,6 +114,38 @@ class ClassService {
             }
         });
     }
+    //update class account
+    getClassPer7Days() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const listClassPerDays = yield Promise.all([
+                    class_repository_1.classRepository.getClassPer1DayAgo(7),
+                    class_repository_1.classRepository.getClassPer1DayAgo(6),
+                    class_repository_1.classRepository.getClassPer1DayAgo(5),
+                    class_repository_1.classRepository.getClassPer1DayAgo(4),
+                    class_repository_1.classRepository.getClassPer1DayAgo(3),
+                    class_repository_1.classRepository.getClassPer1DayAgo(2),
+                    class_repository_1.classRepository.getClassPer1DayAgo(1),
+                ]);
+                const totalSlot = yield class_repository_1.classRepository.getTotalSlot();
+                // const list_empty_slot = await classResult.map((class_detail)=>class_detail.)
+                return listClassPerDays.map((classPerDay, index) => {
+                    let emptySlot = totalSlot;
+                    console.log(index);
+                    for (let i = index; i < 6; i++) {
+                        emptySlot = emptySlot + listClassPerDays[i + 1];
+                    }
+                    return {
+                        emptySlot,
+                        submitSlot: classPerDay,
+                    };
+                });
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
     //Check duplicate schedule
     checkSchedule(listClassId) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -173,6 +206,44 @@ class ClassService {
                     return true;
                 }
                 return false;
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    //update class account
+    getTotalEmpty() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const totalEmpty = yield class_repository_1.classRepository.getTotalSlot();
+                const submitSlot = yield models_1.Class.sum("total_student");
+                return {
+                    totalEmpty,
+                    submitSlot,
+                };
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    //update class account
+    getClassesDashboard() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const classes = yield models_1.Class.findAll({
+                    order: [["total_student", "DESC"]],
+                    limit: 10,
+                });
+                const classesFormat = yield Promise.all(classes.map((classDetail) => __awaiter(this, void 0, void 0, function* () {
+                    const subject = yield subject_repository_1.subjectRepository.getSubjectById(classDetail.dataValues.subject_id);
+                    if (subject === null || subject === void 0 ? void 0 : subject.name.toUpperCase().includes("")) {
+                        return Object.assign(Object.assign({}, classDetail.dataValues), { subject });
+                    }
+                    return null;
+                })));
+                return classesFormat.filter((class_check) => class_check != null);
             }
             catch (error) {
                 throw error;
