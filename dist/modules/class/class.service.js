@@ -194,15 +194,19 @@ class ClassService {
                     yield userClass_repository_1.userClassRepository.deleteAllClass({
                         user_id: user_id,
                     });
-                    yield Promise.all([
-                        ...listClassId.map((class_id) => userClass_repository_1.userClassRepository.createUserClass({
-                            user_id: user_id,
-                            class_id: class_id,
-                        })),
-                        ...checkScheduleResult.map((classDetail) => class_repository_1.classRepository.updateClass({
-                            total_student: ((classDetail === null || classDetail === void 0 ? void 0 : classDetail.total_student) || 0) + 1,
-                        }, classDetail === null || classDetail === void 0 ? void 0 : classDetail.id)),
-                    ]);
+                    yield Promise.all(listClassId.map((class_id) => userClass_repository_1.userClassRepository.createUserClass({
+                        user_id: user_id,
+                        class_id: class_id,
+                    })));
+                    yield Promise.all(checkScheduleResult.map((classDetail) => __awaiter(this, void 0, void 0, function* () {
+                        return class_repository_1.classRepository.updateClass({
+                            total_student: yield models_1.UserClass.count({
+                                where: {
+                                    class_id: classDetail === null || classDetail === void 0 ? void 0 : classDetail.id,
+                                },
+                            }),
+                        }, classDetail === null || classDetail === void 0 ? void 0 : classDetail.id);
+                    })));
                     return true;
                 }
                 return false;

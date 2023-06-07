@@ -1,6 +1,6 @@
 import { HttpError } from "../../common/http";
 import { Logger } from "../../logger";
-import { Class, ClassSession } from "../../models";
+import { Class, ClassSession, UserClass } from "../../models";
 import { sessionRepository } from "../session/session.repository";
 import { subjectRepository } from "../subject/subject.repository";
 import { userRepository } from "../user/user.repository";
@@ -220,22 +220,28 @@ export class ClassService implements ClassServiceInterface {
         await userClassRepository.deleteAllClass({
           user_id: user_id,
         });
-        await Promise.all([
-          ...listClassId.map((class_id) =>
+        await Promise.all(
+          listClassId.map((class_id) =>
             userClassRepository.createUserClass({
               user_id: user_id,
               class_id: class_id,
             })
-          ),
-          ...checkScheduleResult.map((classDetail: any) =>
+          )
+        );
+        await Promise.all(
+          checkScheduleResult.map(async (classDetail: any) =>
             classRepository.updateClass(
               {
-                total_student: (classDetail?.total_student || 0) + 1,
+                total_student: await UserClass.count({
+                  where: {
+                    class_id: classDetail?.id,
+                  },
+                }),
               },
               classDetail?.id
             )
-          ),
-        ]);
+          )
+        );
         return true;
       }
       return false;
